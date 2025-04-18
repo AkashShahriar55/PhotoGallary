@@ -1,7 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:photo_gallary/app/features/splash/splash.dart';
+
+import '../presentation/pages/permission/permission.dart';
+import '../presentation/pages/splash/splash.dart';
+
 
 abstract class _Routes {
   static const String splash = '/splash';
@@ -15,8 +17,16 @@ final GoRouter router = GoRouter(
   routes: [
     GoRoute(
         path: _Routes.splash,
+        name: 'splash',
       builder: (BuildContext context, GoRouterState state) {
         return const SplashScreen();
+      },
+    ),
+    GoRoute(
+      path: _Routes.permission,
+      name: 'permission',
+      builder: (BuildContext context, GoRouterState state) {
+        return const PermissionScreen();
       },
     )
   ]
