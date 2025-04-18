@@ -1,7 +1,7 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:photo_gallary/app/app.dart';
+import 'app/di/injection.dart';
 
 
 
@@ -10,6 +10,7 @@ void main() => runZonedGuarded(_runMyApp, _reportError);
 
 Future<void> _runMyApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupDependencyInjection();
   runApp(const App());
 }
 

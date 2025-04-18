@@ -1,33 +1,36 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:photo_gallary/app/presentation/pages/gallery/gallery.dart';
+import 'package:photo_gallary/app/presentation/pages/permission/permission.dart';
+import 'package:photo_gallary/app/routes/routes.dart';
 
-import '../presentation/pages/permission/permission.dart';
 import '../presentation/pages/splash/splash.dart';
 
 
-abstract class _Routes {
-  static const String splash = '/splash';
-  static const String permission = '/permission';
-  static const String gallery = '/gallery';
-}
 
 
 final GoRouter router = GoRouter(
-  initialLocation: _Routes.splash,
+  initialLocation: Routes.splashRoute.path,
   routes: [
     GoRoute(
-        path: _Routes.splash,
-        name: 'splash',
-      builder: (BuildContext context, GoRouterState state) {
-        return const SplashScreen();
-      },
+        path: Routes.splashRoute.path,
+        name: Routes.splashRoute.name,
+        builder: (context, state) {
+          return const SplashScreen();
+        }
     ),
     GoRoute(
-      path: _Routes.permission,
-      name: 'permission',
-      builder: (BuildContext context, GoRouterState state) {
-        return const PermissionScreen();
-      },
+        path: Routes.permissionRoute.path,
+        name: Routes.permissionRoute.name,
+        builder: (context, state) {
+          return const PermissionScreen();
+        }
+    ),
+    GoRoute(
+        path: Routes.galleryRoute.path,
+        name: Routes.galleryRoute.name,
+        builder: (context, state) {
+          return const GalleryScreen();
+        }
     )
   ]
 );
