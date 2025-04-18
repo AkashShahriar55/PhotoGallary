@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_event.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_state.dart';
 
+import '../../../../core/utils/logger.dart';
 import '../../../../core/utils/permission_manager.dart';
 
 class PermissionBloc extends Bloc<PermissionEvent,PermissionState>{
@@ -27,14 +28,16 @@ class PermissionBloc extends Bloc<PermissionEvent,PermissionState>{
       await DeviceInfoPlugin().androidInfo;
       if (androidInfo.version.sdkInt <= 32) {
         final res = await permissionManager.requestPermission(PermissionEnum.storage);
-
+        Log().d("Permission status: $res");
         return res == PermissionStatusEnum.granted;
       } else {
         final res = await permissionManager.requestPermission(PermissionEnum.photos);
+        Log().d("Permission status: $res");
         return res == PermissionStatusEnum.granted;
       }
     } else {
       final res = await permissionManager.requestPermission(PermissionEnum.photos);
+      Log().d("Permission status: $res");
       return res == PermissionStatusEnum.granted;
     }
   }

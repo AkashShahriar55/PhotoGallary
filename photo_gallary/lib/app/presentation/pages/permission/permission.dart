@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:photo_gallary/app/core/extensions/extensions.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_event.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_state.dart';
+import 'package:photo_gallary/app/routes/router.dart';
 
 import '../../../core/theme/sizes.dart';
 import '../../../core/utils/permission_manager.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../di/injection.dart';
+import '../../../routes/routes.dart';
 
 class PermissionScreen extends StatefulWidget{
   const PermissionScreen({super.key});
@@ -34,7 +37,9 @@ class _PermissionScreenState extends State<PermissionScreen>{
       bloc: _bloc,
       listener: (context, state) {
         if(state is PermissionRequestSuccess){
-          context.read<PermissionBloc>().add(PhotoPermissionRequest());
+          if(state.isPermissionGranted){
+            _goToGallery();
+          }
         }
       },
       builder: (context, state) {
@@ -76,6 +81,11 @@ class _PermissionScreenState extends State<PermissionScreen>{
         );
       },
     );
+  }
+
+
+  _goToGallery(){
+    router.goNamed(Routes.galleryRoute.name);
   }
 
 }
