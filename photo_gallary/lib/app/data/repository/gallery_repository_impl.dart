@@ -1,17 +1,21 @@
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
-import '../../core/utils/logger.dart';
+import 'package:photo_gallary/app/data/datasources/photo_datasource.dart';
 import '../../domain/repository/gallery_repository.dart';
-import '../datasources/local/local_storage/local_photo_storage.dart';
 
 class GalleryRepositoryImpl extends GalleryRepository{
 
-  final LocalPhotoStorage _localPhotoStorage;
+  final PhotoDataSource _photoDatasource;
 
-  GalleryRepositoryImpl(this._localPhotoStorage);
+  GalleryRepositoryImpl(this._photoDatasource);
 
   @override
-  Future<List<Photo>?> fetchPhotos() async{
-    final value = await _localPhotoStorage.fetchPhotos();
-    return value;
+  Future<List<Photo>> fetchPhotos() async{
+    final value = await _photoDatasource.fetchPhotos();
+    return value ?? [];
+  }
+
+  @override
+  Future<Map<Photo,bool>> savePhotos(List<Photo> photos) async{
+    return {};
   }
 }

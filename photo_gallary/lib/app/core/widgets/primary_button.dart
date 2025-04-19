@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:photo_gallary/app/core/theme/sizes.dart';
 
 class PrimaryButton extends StatelessWidget {
   final Function()? onTap;

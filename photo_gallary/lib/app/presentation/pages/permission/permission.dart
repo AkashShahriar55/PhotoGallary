@@ -6,34 +6,18 @@ import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_event.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_state.dart';
 import 'package:photo_gallary/app/routes/router.dart';
-
 import '../../../core/theme/sizes.dart';
-import '../../../core/utils/permission_manager.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../di/injection.dart';
 import '../../../routes/routes.dart';
 
-class PermissionScreen extends StatefulWidget{
+class PermissionScreen extends StatelessWidget{
   const PermissionScreen({super.key});
-
-  @override
-  State<PermissionScreen> createState() => _PermissionScreenState();
-}
-
-class _PermissionScreenState extends State<PermissionScreen>{
-
-  final _permissionBloc = getIt<PermissionBloc>();
-
-  @override
-  void initState() {
-    super.initState();
-    _permissionBloc.add(PhotoPermissionRequest());
-  }
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<PermissionBloc,PermissionState>(
-      bloc: _permissionBloc,
+      bloc: getIt<PermissionBloc>()..add(PhotoPermissionRequest()),
       listener: (context, state) {
         if(state is PermissionRequestSuccess){
           if(state.isPermissionGranted){
@@ -64,7 +48,7 @@ class _PermissionScreenState extends State<PermissionScreen>{
                 height: Dimens.dimen_42,
                 child: PrimaryButton(
                     onTap: (){
-                      getIt<PermissionBloc>().add(PhotoPermissionRequest());
+                      getIt<PermissionBloc>().add(PhotoPermissionRequest(shouldOpenSettings: true));
                     },
                     child:  Text(
                       'Grant Access',

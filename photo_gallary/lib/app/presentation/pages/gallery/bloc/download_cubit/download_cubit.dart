@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gal/gal.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
-import 'package:photo_gallary/app/core/utils/permission_manager.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/download_cubit/download_state.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/selection_cubit/selection_cubit.dart';
@@ -72,7 +71,7 @@ class DownloadCubit extends Cubit<DownloadState>{
         status: DownloadStatus.success,
       ));
 
-    } catch (e, st) {
+    } catch (e) {
       Log.e('downloadPhotos error ${e.toString()}');
       emit(state.copyWith(
         status: DownloadStatus.error,

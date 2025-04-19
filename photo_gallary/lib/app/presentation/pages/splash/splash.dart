@@ -7,29 +7,14 @@ import 'package:photo_gallary/app/routes/router.dart';
 import '../../../routes/routes.dart';
 import 'bloc/splash_event.dart';
 
-class SplashScreen extends StatefulWidget{
+class SplashScreen extends StatelessWidget{
+
   const SplashScreen({super.key});
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-
-class _SplashScreenState extends State<SplashScreen> {
-
-  final SplashBloc _bloc = getIt<SplashBloc>();
-
-  @override
-  void initState() {
-    super.initState();
-    _bloc.add(SplashInitializeEvent());
-  }
-
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SplashBloc,SplashState>(
-      bloc: _bloc,
+      bloc: getIt<SplashBloc>()..add(SplashInitializeEvent()),
       listener: (context,state){
         if(state is SplashInitializationSuccess){
           if(state.isPermissionGranted){
@@ -54,4 +39,5 @@ class _SplashScreenState extends State<SplashScreen> {
   _goToPermission(){
     router.goNamed(Routes.permissionRoute.name);
   }
+
 }

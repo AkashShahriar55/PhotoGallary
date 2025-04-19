@@ -9,7 +9,6 @@ import 'package:photo_gallary/app/di/injection.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/download_cubit/download_cubit.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/gallary_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/selection_cubit/selection_cubit.dart';
-import '../../../core/utils/logger.dart';
 import 'bloc/download_cubit/download_state.dart';
 import 'bloc/gallary_event.dart';
 import 'bloc/gallary_state.dart';

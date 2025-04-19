@@ -1,5 +1,4 @@
 
-import '../../../../../core/utils/logger.dart';
 
 enum DownloadStatus {initial, downloading, success, error}
 

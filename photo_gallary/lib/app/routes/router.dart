@@ -5,9 +5,7 @@ import 'package:photo_gallary/app/routes/routes.dart';
 
 import '../presentation/pages/splash/splash.dart';
 
-
-
-
+// setting up the router for the app
 final GoRouter router = GoRouter(
   initialLocation: Routes.splashRoute.path,
   routes: [
