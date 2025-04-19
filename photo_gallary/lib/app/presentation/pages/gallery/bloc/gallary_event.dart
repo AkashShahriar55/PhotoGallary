@@ -8,6 +8,6 @@ class FetchPhotos extends GalleryEvent {
 }
 
 class DownloadPhotos extends GalleryEvent {
-  final List<int> photoIds;
+  final List<String> photoIds;
   const DownloadPhotos(this.photoIds);
 }

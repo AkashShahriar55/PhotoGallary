@@ -1,10 +1,10 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SelectionCubit extends Cubit<List<int>> {
+class SelectionCubit extends Cubit<List<String>> {
   SelectionCubit() : super([]);
 
-  void selectDeselect(int id) {
+  void selectDeselect(String id) {
     if (state.contains(id)) {
       emit(state.where((element) => element != id).toList());
     } else {

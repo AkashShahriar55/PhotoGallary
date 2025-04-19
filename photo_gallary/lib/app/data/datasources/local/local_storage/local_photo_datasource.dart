@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:gal/gal.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
 
+import '../../../../core/utils/logger.dart';
 import '../../photo_datasource.dart';
 
 class LocalPhotoDatasource extends PhotoDataSource {
@@ -19,7 +20,8 @@ class LocalPhotoDatasource extends PhotoDataSource {
       }
       List<Photo> photoList = photos.map((dynamic photoJson){return Photo.fromJson(photoJson);}).toList();
       return photoList;
-    } on PlatformException {
+    } on PlatformException catch (e) {
+      Log.e("Error fetching photos: ${e.message}");
       return null;
     }
   }

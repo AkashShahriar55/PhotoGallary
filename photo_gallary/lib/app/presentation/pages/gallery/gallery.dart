@@ -65,7 +65,7 @@ class _GalleryView extends StatelessWidget {
       itemCount: photos.length,
       itemBuilder: (ctx, i) {
         final photo = photos[i];
-        return BlocBuilder<SelectionCubit, List<int>>(
+        return BlocBuilder<SelectionCubit, List<String>>(
           builder: (ctx, selected) {
             return PhotoTile(
               key: ValueKey(photo.id),
@@ -80,7 +80,7 @@ class _GalleryView extends StatelessWidget {
   }
 
   Widget _buildDownloadFab(BuildContext context) {
-    return BlocBuilder<SelectionCubit, List<int>>(
+    return BlocBuilder<SelectionCubit, List<String>>(
       builder: (ctx, selectedList) {
         if (selectedList.isEmpty) return const SizedBox.shrink();
         return Container(
