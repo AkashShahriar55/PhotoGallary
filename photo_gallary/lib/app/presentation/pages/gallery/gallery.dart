@@ -77,7 +77,7 @@ class _GalleryView extends StatelessWidget {
           builder: (ctx, selected) {
             return PhotoTile(
               key: ValueKey(photo.id),
-              path: photo.path,
+              photo: photo,
               selected: selected.contains(photo),
               onTap: () => ctx.read<SelectionCubit>().selectDeselect(photo),
             );

@@ -8,6 +8,7 @@ class Photo {
       final int? timestamp; // Nullable timestamp
       final int width; // Width of the photo
       final int height; // Height of the photo
+      final int orientation;
 
       Photo({
         required this.id,
@@ -18,6 +19,7 @@ class Photo {
         this.timestamp,
         required this.width,
         required this.height,
+        required this.orientation ,
       });
 
       // From JSON factory for converting JSON to Photo object
@@ -31,6 +33,7 @@ class Photo {
           timestamp: json['timestamp'],
           width: json['width'],
           height: json['height'],
+          orientation: json['orientation'],
         );
       }
 }

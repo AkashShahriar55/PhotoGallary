@@ -19,6 +19,7 @@ fun fetchAllPhotosPaginated(context: Context,uri: Uri): List<Photo> {
         MediaStore.MediaColumns.BUCKET_ID,
         MediaStore.MediaColumns.HEIGHT,
         MediaStore.MediaColumns.WIDTH,
+        MediaStore.MediaColumns.ORIENTATION
     )
 
 
@@ -32,6 +33,7 @@ fun fetchAllPhotosPaginated(context: Context,uri: Uri): List<Photo> {
         val imageUriIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         val widthIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.WIDTH)
         val heightIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.HEIGHT)
+        val orientationIndex = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.ORIENTATION)
         while (cursor.moveToNext()) {
             val mediaId = cursor.getLong(idColumn)
             val mediaUri = ContentUris.withAppendedId(uri, mediaId)
@@ -40,6 +42,7 @@ fun fetchAllPhotosPaginated(context: Context,uri: Uri): List<Photo> {
             val fileSize = cursor.getLong(sizeColumn)
             val width = cursor.getInt(widthIndex)
             val height = cursor.getInt(heightIndex)
+            val orientation = cursor.getInt(orientationIndex)
 
             val timestamp = cursor.getLong(dateColumn) * 1000
 
@@ -52,7 +55,8 @@ fun fetchAllPhotosPaginated(context: Context,uri: Uri): List<Photo> {
                     timestamp = timestamp,
                     path = imagePath,
                     width = width,
-                    height = height
+                    height = height,
+                    orientation = orientation
                 )
             )
         }

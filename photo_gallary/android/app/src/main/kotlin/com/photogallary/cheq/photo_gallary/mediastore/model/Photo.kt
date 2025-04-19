@@ -9,7 +9,8 @@ data class Photo (
     val timestamp: Long? = null,
     val path:String,
     val width : Int,
-    val height : Int
+    val height : Int,
+    val orientation: Int
 ){
     // Manually implement toJson() method to convert Media to Map<String, dynamic>
     fun toJson(): Map<String, Any?> {
@@ -22,6 +23,7 @@ data class Photo (
             "path" to path,
             "width" to width,
             "height" to height,
+            "orientation" to orientation
         )
     }
 }
