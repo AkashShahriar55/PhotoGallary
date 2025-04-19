@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallary/app/core/theme/sizes.dart';
+import 'package:photo_gallary/app/core/utils/logger.dart';
 import 'package:photo_gallary/app/core/widgets/gallery_app_bar.dart';
 import 'package:photo_gallary/app/core/widgets/photo_tile.dart';
 import 'package:photo_gallary/app/core/widgets/secondary_button.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
 import 'package:photo_gallary/app/di/injection.dart';
-import 'package:photo_gallary/app/presentation/pages/gallery/bloc/download_cubit/download_cubit.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/gallary_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/selection_cubit/selection_cubit.dart';
-import '../../../domain/usecase/save_gallery_photos.dart';
-import 'bloc/download_cubit/download_state.dart';
 import 'bloc/gallary_event.dart';
 import 'bloc/gallary_state.dart';
 
@@ -23,8 +21,7 @@ class GalleryScreen extends StatelessWidget{
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => SelectionCubit()),
-          BlocProvider(create: (ctx) => DownloadCubit(ctx.read<SelectionCubit>(), getIt<SaveGalleryPhotos>())),
-          BlocProvider(create: (_) => getIt<GalleryBloc>()..add(FetchPhotos())),
+          BlocProvider(create: (_) => getIt<GalleryBloc>()),
         ],
         child: const _GalleryView()
     );
@@ -39,23 +36,19 @@ class _GalleryView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: galleryAppBar(context: context, title: 'Photos'),
-      body: BlocListener<DownloadCubit, DownloadState>(
-        listener: (ctx, state) {
-          if (!(state.status == DownloadStatus.downloading) && (state.status == DownloadStatus.success)) {
-            ctx.read<GalleryBloc>().add(FetchPhotos());
-          } else if (state.errorMessage != null) {
-            ScaffoldMessenger.of(ctx).showSnackBar(
-              SnackBar(content: Text(state.errorMessage!)),
+      body: BlocConsumer<GalleryBloc, GalleryState>(
+        listener: (context, state) {
+          if (state.errorMessage != null) {
+            Log.e(state.errorMessage.toString());
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.errorMessage ?? "")),
             );
           }
         },
-        child: BlocBuilder<GalleryBloc, GalleryState>(
-          builder: (ctx, state) {
-            if (state is GalleryLoading || state is GalleryInitial) return const Center(child: CircularProgressIndicator());
-            if (state is GalleryError)   return Center(child: Text(state.error));
-            return _buildGrid(ctx, (state as GalleryLoaded).photos);
-          },
-        ),
+        builder: (ctx, state) {
+          if (state.isPhotoLoading) return const Center(child: CircularProgressIndicator());
+          return _buildGrid(ctx, state.photos);
+        },
       ),
       floatingActionButton: _buildDownloadFab(context),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -72,14 +65,13 @@ class _GalleryView extends StatelessWidget {
       itemCount: photos.length,
       itemBuilder: (ctx, i) {
         final photo = photos[i];
-        return BlocBuilder<SelectionCubit, List<Photo>>(
-          buildWhen: (prev, next) => prev.contains(photo) != next.contains(photo),
+        return BlocBuilder<SelectionCubit, List<int>>(
           builder: (ctx, selected) {
             return PhotoTile(
               key: ValueKey(photo.id),
               photo: photo,
-              selected: selected.contains(photo),
-              onTap: () => ctx.read<SelectionCubit>().selectDeselect(photo),
+              selected: selected.contains(photo.id),
+              onTap: () => ctx.read<SelectionCubit>().selectDeselect(photo.id),
             );
           },
         );
@@ -88,25 +80,36 @@ class _GalleryView extends StatelessWidget {
   }
 
   Widget _buildDownloadFab(BuildContext context) {
-    return BlocBuilder<DownloadCubit, DownloadState>(
-      builder: (ctx, download) {
-        if (!download.isPhotoSelected) return const SizedBox.shrink();
+    return BlocBuilder<SelectionCubit, List<int>>(
+      builder: (ctx, selectedList) {
+        if (selectedList.isEmpty) return const SizedBox.shrink();
         return Container(
           margin: const EdgeInsets.only(bottom: Dimens.dimen_33),
           width: 310,
           height: 50,
-          child: SecondaryButton(
-            onTap: download.status == DownloadStatus.downloading
+          child: _buildDownloadFabContent(context),
+        );
+      },
+    );
+  }
+
+
+  Widget _buildDownloadFabContent(BuildContext context){
+    final galleryBloc = context.read<GalleryBloc>();
+    final selectionCubit = context.read<SelectionCubit>();
+    return BlocBuilder<GalleryBloc,GalleryState>(
+        builder: (ctx, state) {
+          return SecondaryButton(
+            onTap: state.status == DownloadStatus.downloading
                 ? null
-                : () => ctx.read<DownloadCubit>().downloadPhotos(),
-            child: download.status == DownloadStatus.downloading
+                : () => galleryBloc.add(DownloadPhotos(selectionCubit.state)),
+            child: state.status == DownloadStatus.downloading
                 ? const SizedBox(
               width: Dimens.dimen_24, height: Dimens.dimen_24, child: CircularProgressIndicator(strokeWidth: Dimens.dimen_2),
             )
                 : const Text('DOWNLOAD'),
-          ),
-        );
-      },
+          );
+        }
     );
   }
 

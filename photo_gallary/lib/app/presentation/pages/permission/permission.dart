@@ -7,18 +7,36 @@ import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_state.dart';
 import 'package:photo_gallary/app/routes/router.dart';
 import '../../../core/theme/sizes.dart';
+import '../../../core/utils/logger.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../../../di/injection.dart';
 import '../../../routes/routes.dart';
 
-class PermissionScreen extends StatelessWidget{
+class PermissionScreen extends StatefulWidget{
+
   const PermissionScreen({super.key});
 
   @override
+  State<PermissionScreen> createState() => _PermissionScreenState();
+}
+
+class _PermissionScreenState extends State<PermissionScreen> {
+  late final PermissionBloc _permissionBloc;
+
+  @override
+  void initState() {
+    _permissionBloc = getIt<PermissionBloc>();
+    super.initState();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+
     return BlocListener<PermissionBloc,PermissionState>(
-      bloc: getIt<PermissionBloc>()..add(PhotoPermissionRequest()),
+      bloc: _permissionBloc,
       listener: (context, state) {
+        Log.d('Permission state: $state');
         if(state is PermissionRequestSuccess){
           if(state.isPermissionGranted){
             _goToGallery();
@@ -48,7 +66,7 @@ class PermissionScreen extends StatelessWidget{
                 height: Dimens.dimen_42,
                 child: PrimaryButton(
                     onTap: (){
-                      getIt<PermissionBloc>().add(PhotoPermissionRequest(shouldOpenSettings: true));
+                      _permissionBloc.add(PhotoPermissionRequest(shouldOpenSettings: true));
                     },
                     child:  Text(
                       'Grant Access',
@@ -64,9 +82,7 @@ class PermissionScreen extends StatelessWidget{
     );
   }
 
-
   _goToGallery(){
     router.goNamed(Routes.galleryRoute.name);
   }
-
 }

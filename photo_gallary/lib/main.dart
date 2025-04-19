@@ -14,7 +14,6 @@ Future<void> _runMyApp() async {
   );
 }
 
-
 void _reportError(Object error, StackTrace stackTrace) {
   Log.e("Error: $error");
 }

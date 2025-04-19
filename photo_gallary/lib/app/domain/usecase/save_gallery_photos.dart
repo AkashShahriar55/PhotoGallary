@@ -7,14 +7,14 @@ import '../repository/gallery_repository.dart';
 import '../result.dart';
 import 'base/use_case.dart';
 
-class SaveGalleryPhotos extends BaseUserCase<bool, Photo> {
+class SaveGalleryPhotos extends BaseUserCase<String, Photo> {
   final GalleryRepository _galleryRepository;
   final PermissionManager _permissionManager;
 
   SaveGalleryPhotos(this._galleryRepository,this._permissionManager);
 
   @override
-  Future<Result<bool>> call(Photo photo) async{
+  Future<Result<String>> call(Photo photo) async{
     try{
       final permission =await  _permissionManager.checkAndRequestPhotoPermission(false);
       if(permission == false){

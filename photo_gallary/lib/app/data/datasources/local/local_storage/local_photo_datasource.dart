@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/services.dart';
 import 'package:gal/gal.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
@@ -26,11 +25,11 @@ class LocalPhotoDatasource extends PhotoDataSource {
   }
 
   @override
-  Future<bool> savePhoto(Photo photo) async{
+  Future<String> savePhoto(Photo photo, {int blurRadius = 10}) async{
     //get external storage directory
     final src = File(photo.path);
     await Gal.putImage(src.path);
-    return true;
+    return "";
   }
 
 }

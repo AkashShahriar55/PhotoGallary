@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:photo_gallary/app/core/theme/sizes.dart';
 
 import '../../data/datasources/local/local_storage/model/photo.dart';
-import '../utils/logger.dart';
 
 class PhotoTile extends StatelessWidget {
   final Photo photo;
@@ -28,8 +27,6 @@ class PhotoTile extends StatelessWidget {
         child: LayoutBuilder(
           builder: (context, constraints) {
             // determine the target decode size (in device pixels)
-
-            Log.d("PhotoTile width: ${photo.width}, height: ${photo.height} , orientation: ${photo.orientation}");
 
             final int actualHeight = photo.orientation == 90 ? photo.width : photo.height;
             final int actualWidth = photo.orientation == 90 ? photo.height : photo.width;

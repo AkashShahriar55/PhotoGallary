@@ -14,7 +14,7 @@ class SplashBloc extends Bloc<SplashEvent,SplashState>{
     on<SplashInitializeEvent>((event,emit) async{
 
       // Doing initialization task here
-      await Future<void>.delayed(const Duration(seconds: 5));
+      await Future<void>.delayed(const Duration(seconds: 3));
 
       // Check if permission is granted
       final bool isPermissionGranted = await permissionManager.checkAndRequestPhotoPermission(false);
@@ -22,6 +22,8 @@ class SplashBloc extends Bloc<SplashEvent,SplashState>{
       // Emit the success state with the permission status
       emit(SplashInitializationSuccess(isPermissionGranted: isPermissionGranted));
     });
+
+    add(SplashInitializeEvent());
   }
 
 

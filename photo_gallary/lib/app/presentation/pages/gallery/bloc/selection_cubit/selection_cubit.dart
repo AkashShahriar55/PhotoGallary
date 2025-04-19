@@ -1,15 +1,14 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
 
-class SelectionCubit extends Cubit<List<Photo>> {
+class SelectionCubit extends Cubit<List<int>> {
   SelectionCubit() : super([]);
 
-  void selectDeselect(Photo photo) {
-    if (state.contains(photo)) {
-      emit(state.where((element) => element != photo).toList());
+  void selectDeselect(int id) {
+    if (state.contains(id)) {
+      emit(state.where((element) => element != id).toList());
     } else {
-      emit([...state, photo]);
+      emit([...state, id]);
     }
   }
 

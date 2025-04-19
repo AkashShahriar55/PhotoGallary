@@ -1,23 +1,37 @@
 import '../../../../data/datasources/local/local_storage/model/photo.dart';
 
-sealed class GalleryState {
-  const GalleryState();
-}
 
-class GalleryInitial extends GalleryState {
-  const GalleryInitial();
-}
+enum DownloadStatus {initial, downloading, success, error}
 
-class GalleryLoading extends GalleryState {
-  const GalleryLoading();
-}
-
-class GalleryLoaded extends GalleryState {
+class GalleryState {
+  final bool isPhotoLoading;
+  final DownloadStatus status;
+  final String? errorMessage;
+  final int? progress;
   final List<Photo> photos;
-  const GalleryLoaded({required this.photos});
+
+  const GalleryState({
+    this.isPhotoLoading = false,
+    this.status = DownloadStatus.initial,
+    this.errorMessage,
+    this.progress,
+    this.photos = const [],
+  });
+
+  GalleryState copyWith({
+    bool? isPhotoLoading,
+    DownloadStatus? status,
+    String? errorMessage,
+    int? progress,
+    List<Photo>? photos,
+  }) {
+    return GalleryState(
+      isPhotoLoading: isPhotoLoading ?? this.isPhotoLoading,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      progress: progress ?? this.progress,
+      photos: photos ?? this.photos,
+    );
+  }
 }
 
-class GalleryError extends GalleryState {
-  final String error;
-  const GalleryError({required this.error});
-}

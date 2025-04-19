@@ -46,5 +46,5 @@ void _injectUseCases(){
 void _injectBlocs(){
   getIt.registerFactory<SplashBloc>(() => SplashBloc(getIt<PermissionManager>()));
   getIt.registerFactory<PermissionBloc>(() => PermissionBloc(getIt<PermissionManager>()));
-  getIt.registerFactory<GalleryBloc>(() => GalleryBloc(getIt<FetchGalleryPhotos>()));
+  getIt.registerFactory<GalleryBloc>(() => GalleryBloc(getIt<FetchGalleryPhotos>(), getIt<SaveGalleryPhotos>()));
 }
