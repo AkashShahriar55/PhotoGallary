@@ -11,7 +11,7 @@ import '../../../../core/utils/permission_manager.dart';
 class PermissionBloc extends Bloc<PermissionEvent,PermissionState>{
   final PermissionManager permissionManager;
 
-  PermissionBloc(super.initialState, this.permissionManager){
+  PermissionBloc( this.permissionManager) : super(PermissionInitial()){
     on<PhotoPermissionRequest>((event, emit) async {
       // Request permission
       final bool isGranted = await _requestPhotoAccess();
@@ -28,16 +28,13 @@ class PermissionBloc extends Bloc<PermissionEvent,PermissionState>{
       await DeviceInfoPlugin().androidInfo;
       if (androidInfo.version.sdkInt <= 32) {
         final res = await permissionManager.requestPermission(PermissionEnum.storage);
-        Log().d("Permission status: $res");
         return res == PermissionStatusEnum.granted;
       } else {
         final res = await permissionManager.requestPermission(PermissionEnum.photos);
-        Log().d("Permission status: $res");
         return res == PermissionStatusEnum.granted;
       }
     } else {
       final res = await permissionManager.requestPermission(PermissionEnum.photos);
-      Log().d("Permission status: $res");
       return res == PermissionStatusEnum.granted;
     }
   }

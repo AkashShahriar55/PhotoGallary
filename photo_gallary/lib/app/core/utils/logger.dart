@@ -2,38 +2,53 @@
 import 'package:logger/logger.dart';
 
 class Log {
-  // Singleton instance
   static final Log _instance = Log._internal();
+  late Logger _logger;
 
-  final _logger = Logger();
   factory Log() {
     return _instance;
   }
 
-  Log._internal();
-
-  void d(String message) {
-    _logger.d(message, time: DateTime.now());
+  Log._internal() {
+    _logger = Logger(
+      printer: PrettyPrinter(
+          methodCount: 2,
+          // number of method calls to be displayed
+          errorMethodCount: 8,
+          // number of method calls if stacktrace is provided
+          lineLength: 120,
+          // width of the output
+          colors: true,
+          // Colorful log messages
+          printEmojis: true,
+          // Print an emoji for each log message
+          printTime: false // Should each log print contain a timestamp
+      ),
+    );
   }
 
-  void e(String message, {StackTrace? stackTrace, String? name}) {
-    _logger.e(message, stackTrace: stackTrace, time: DateTime.now());
+  static void d(String message) {
+    _instance._logger.d(message, time: DateTime.now());
   }
 
-  void i(String message) {
-    _logger.i(message, time: DateTime.now());
+  static void e(String message, {StackTrace? stackTrace, String? name}) {
+    _instance._logger.e(message, stackTrace: stackTrace, time: DateTime.now());
   }
 
-  void w(String message) {
-    _logger.w(message, time: DateTime.now());
+  static void i(String message) {
+    _instance._logger.i(message, time: DateTime.now());
   }
 
-  void wtf(String message) {
-    _logger.wtf(message, time: DateTime.now());
+  static void w(String message) {
+    _instance._logger.w(message, time: DateTime.now());
   }
 
-  void v(String message) {
-    _logger.v(message, time: DateTime.now());
+  static void wtf(String message) {
+    _instance._logger.wtf(message, time: DateTime.now());
+  }
+
+  static void v(String message) {
+    _instance._logger.v(message, time: DateTime.now());
   }
 
 

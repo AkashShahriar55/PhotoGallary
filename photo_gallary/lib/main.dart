@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:photo_gallary/app/app.dart';
+import 'app/core/utils/logger.dart';
 import 'app/di/injection.dart';
 
 
@@ -16,5 +17,5 @@ Future<void> _runMyApp() async {
 
 
 void _reportError(Object error, StackTrace stackTrace) {
-
+  Log.d("Error: $error");
 }

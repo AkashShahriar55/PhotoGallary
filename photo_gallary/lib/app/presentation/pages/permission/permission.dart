@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:photo_gallary/app/core/extensions/extensions.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_event.dart';
@@ -23,18 +22,18 @@ class PermissionScreen extends StatefulWidget{
 
 class _PermissionScreenState extends State<PermissionScreen>{
 
-  final PermissionBloc _bloc = PermissionBloc(PermissionInitial(),getIt<PermissionManager>());
+  final _permissionBloc = getIt<PermissionBloc>();
 
   @override
   void initState() {
     super.initState();
-    _bloc.add(PhotoPermissionRequest());
+    _permissionBloc.add(PhotoPermissionRequest());
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<PermissionBloc,PermissionState>(
-      bloc: _bloc,
+    return BlocListener<PermissionBloc,PermissionState>(
+      bloc: _permissionBloc,
       listener: (context, state) {
         if(state is PermissionRequestSuccess){
           if(state.isPermissionGranted){
@@ -42,44 +41,42 @@ class _PermissionScreenState extends State<PermissionScreen>{
           }
         }
       },
-      builder: (context, state) {
-        return Scaffold(
-          body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset('assets/svgs/permission_icon.svg',width: 123,height: 149),
-                SizedBox(height: Dimens.dimen_42),
-                Text(
-                  'Require Permission',
-                  style: context.textTheme.bodyMedium,
+      child: Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SvgPicture.asset('assets/svgs/permission_icon.svg',width: 123,height: 149),
+              SizedBox(height: Dimens.dimen_42),
+              Text(
+                'Require Permission',
+                style: context.textTheme.bodyMedium,
+              ),
+              SizedBox(height: Dimens.dimen_8),
+              Text(
+                'To show your black and white photos\nwe just need your folder permission.\nWe promise, we don’t take your photos.',
+                style: context.textTheme.displaySmall,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Dimens.dimen_42),
+              SizedBox(
+                width: Dimens.dimen_296,
+                height: Dimens.dimen_42,
+                child: PrimaryButton(
+                    onTap: (){
+                      getIt<PermissionBloc>().add(PhotoPermissionRequest());
+                    },
+                    child:  Text(
+                      'Grant Access',
+                      style: context.textTheme.labelMedium,
+                    )
                 ),
-                SizedBox(height: Dimens.dimen_8),
-                Text(
-                  'To show your black and white photos\nwe just need your folder permission.\nWe promise, we don’t take your photos.',
-                  style: context.textTheme.displaySmall,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Dimens.dimen_42),
-                SizedBox(
-                  width: Dimens.dimen_296,
-                  height: Dimens.dimen_42,
-                  child: PrimaryButton(
-                      onTap: (){
-                        _bloc.add(PhotoPermissionRequest());
-                      },
-                      child:  Text(
-                        'Grant Access',
-                        style: context.textTheme.labelMedium,
-                      )
-                  ),
-                )
+              )
 
-              ],
-            ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
