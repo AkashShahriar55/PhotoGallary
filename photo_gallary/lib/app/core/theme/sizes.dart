@@ -14,11 +14,14 @@ final class Dimens{
   static const double dimen_16 = 16;
   static const double dimen_20 = 20;
   static const double dimen_21 = 21;
-  static const double dimen_26 = 26;
+  static const double dimen_26 = 24;
+  static const double dimen_24 = 26;
+  static const double dimen_33 = 33;
   static const double dimen_42 = 42;
   static const double dimen_50 = 50;
   static const double dimen_130 = 130;
   static const double dimen_149 = 149;
   static const double dimen_123 = 123;
   static const double dimen_296 = 296;
+
 }

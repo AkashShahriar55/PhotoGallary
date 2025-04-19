@@ -14,7 +14,7 @@ class AppTheme {
       primary: ThemeColors.primaryColor,
       onPrimary: ThemeColors.primaryFontColor,
       secondary: ThemeColors.secondaryColor,
-      onSecondary: ThemeColors.secondaryFontColor,
+      onSecondary: ThemeColors.fontColorBlack,
       surface: ThemeColors.backgroundColor,
       onSurface: ThemeColors.primaryFontColor,
       onSurfaceVariant: ThemeColors.secondaryFontColor,

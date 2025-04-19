@@ -14,14 +14,16 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
   GalleryBloc(this.fetchPaginatedGalleryPhotos) : super(GalleryInitial()) {
     on<FetchPhotos>((event, emit) async{
       // Emit the loading state
-      emit(GalleryLoading());
+      if(state is GalleryInitial){
+        emit(GalleryLoading());
+      }
       try{
         final photos = await fetchPaginatedGalleryPhotos.execute();
         emit(GalleryLoaded(photos: photos));
       }catch(e){
         emit(GalleryError(error: e.toString()));
       }
-
     });
+
   }
 }

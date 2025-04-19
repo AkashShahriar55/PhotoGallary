@@ -30,16 +30,16 @@ class SplashBloc extends Bloc<SplashEvent,SplashState>{
 
 
   Future<bool> _checkIfPermissionIsGiven() async {
+    PermissionEnum permissionEnum = PermissionEnum.photos;
     if (Platform.isAndroid) {
       final AndroidDeviceInfo androidInfo =
       await DeviceInfoPlugin().androidInfo;
       if (androidInfo.version.sdkInt <= 32) {
-        return await permissionManager.isPermissionGranted(PermissionEnum.storage);
+        permissionEnum = PermissionEnum.storage;
       } else {
-        return await permissionManager.isPermissionGranted(PermissionEnum.photos);
+        permissionEnum = PermissionEnum.photos;
       }
-    } else {
-      return await permissionManager.isPermissionGranted(PermissionEnum.photos);
     }
+    return await permissionManager.isPermissionGranted(permissionEnum);
   }
 }

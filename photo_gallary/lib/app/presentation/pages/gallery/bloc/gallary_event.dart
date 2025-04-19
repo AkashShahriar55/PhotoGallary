@@ -4,6 +4,5 @@ sealed class GalleryEvent {
 
 
 class FetchPhotos extends GalleryEvent {
-  final int pageNo;
-  const FetchPhotos(this.pageNo);
+  const FetchPhotos();
 }

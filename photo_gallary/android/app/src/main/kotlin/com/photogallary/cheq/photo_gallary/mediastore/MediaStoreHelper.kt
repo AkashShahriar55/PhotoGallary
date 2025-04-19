@@ -22,7 +22,7 @@ fun fetchAllPhotosPaginated(context: Context,uri: Uri): List<Photo> {
     )
 
 
-    val orderBy = "${MediaStore.Images.Media.DATE_TAKEN} DESC"
+    val orderBy = "${MediaStore.Images.Media.DATE_MODIFIED} DESC"
 
     context.contentResolver.query(uri, projectionList.toTypedArray(), null, null, orderBy)?.use { cursor ->
         val idColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID)
