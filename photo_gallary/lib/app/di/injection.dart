@@ -38,8 +38,8 @@ void _injectRepositories(){
 
 // This injects Use Cases
 void _injectUseCases(){
-  getIt.registerFactory<FetchGalleryPhotos>(() => FetchGalleryPhotos(galleryRepository: getIt<GalleryRepository>(), permissionManager: getIt<PermissionManager>()));
-  getIt.registerFactory<SaveGalleryPhotos>(() => SaveGalleryPhotos(galleryRepository: getIt<GalleryRepository>(), permissionManager: getIt<PermissionManager>()));
+  getIt.registerFactory<FetchGalleryPhotos>(() => FetchGalleryPhotos(getIt<GalleryRepository>(),getIt<PermissionManager>()));
+  getIt.registerFactory<SaveGalleryPhotos>(() => SaveGalleryPhotos(getIt<GalleryRepository>(), getIt<PermissionManager>()));
 }
 
 // This injects Blocs

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
+import 'package:gal/gal.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
 
 import '../../photo_datasource.dart';
@@ -23,9 +26,11 @@ class LocalPhotoDatasource extends PhotoDataSource {
   }
 
   @override
-  Future<Map<Photo,bool>> savePhotos(List<Photo> photos) {
-    // TODO: implement savePhotos
-    throw UnimplementedError();
+  Future<bool> savePhoto(Photo photo) async{
+    //get external storage directory
+    final src = File(photo.path);
+    await Gal.putImage(src.path);
+    return true;
   }
 
 }

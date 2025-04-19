@@ -9,6 +9,7 @@ import 'package:photo_gallary/app/di/injection.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/download_cubit/download_cubit.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/gallary_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/selection_cubit/selection_cubit.dart';
+import '../../../domain/usecase/save_gallery_photos.dart';
 import 'bloc/download_cubit/download_state.dart';
 import 'bloc/gallary_event.dart';
 import 'bloc/gallary_state.dart';
@@ -22,7 +23,7 @@ class GalleryScreen extends StatelessWidget{
     return MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => SelectionCubit()),
-          BlocProvider(create: (ctx) => DownloadCubit(ctx.read<SelectionCubit>())),
+          BlocProvider(create: (ctx) => DownloadCubit(ctx.read<SelectionCubit>(), getIt<SaveGalleryPhotos>())),
           BlocProvider(create: (_) => getIt<GalleryBloc>()..add(FetchPhotos())),
         ],
         child: const _GalleryView()
@@ -40,12 +41,8 @@ class _GalleryView extends StatelessWidget {
       appBar: galleryAppBar(context: context, title: 'Photos'),
       body: BlocListener<DownloadCubit, DownloadState>(
         listener: (ctx, state) {
-          if(state.status == DownloadStatus.downloading) {
+          if (!(state.status == DownloadStatus.downloading) && (state.status == DownloadStatus.success)) {
             ctx.read<GalleryBloc>().add(FetchPhotos());
-          } else if (!(state.status == DownloadStatus.downloading) && (state.status == DownloadStatus.success)) {
-            ScaffoldMessenger.of(ctx).showSnackBar(
-              const SnackBar(content: Text('Images saved!')),
-            );
           } else if (state.errorMessage != null) {
             ScaffoldMessenger.of(ctx).showSnackBar(
               SnackBar(content: Text(state.errorMessage!)),

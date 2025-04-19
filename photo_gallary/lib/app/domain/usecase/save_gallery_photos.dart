@@ -7,23 +7,20 @@ import '../repository/gallery_repository.dart';
 import '../result.dart';
 import 'base/use_case.dart';
 
-class SaveGalleryPhotos extends BaseUserCase<Map<Photo,bool>, List<Photo>> {
-  final GalleryRepository galleryRepository;
-  final PermissionManager permissionManager;
+class SaveGalleryPhotos extends BaseUserCase<bool, Photo> {
+  final GalleryRepository _galleryRepository;
+  final PermissionManager _permissionManager;
 
-  SaveGalleryPhotos({
-    required this.permissionManager,
-    required this.galleryRepository,
-  });
+  SaveGalleryPhotos(this._galleryRepository,this._permissionManager);
 
   @override
-  Future<Result<Map<Photo,bool>>> call(List<Photo> photos) async{
+  Future<Result<bool>> call(Photo photo) async{
     try{
-      final permission =await  permissionManager.checkAndRequestPhotoPermission(false);
+      final permission =await  _permissionManager.checkAndRequestPhotoPermission(false);
       if(permission == false){
         return Result.error(Exception("Permission denied"));
       }
-      final isSaved = await galleryRepository.savePhotos(photos);
+      final isSaved = await _galleryRepository.savePhotos(photo);
       return Result.ok(isSaved);
     }catch(e){
       return Result.error(Exception(e.toString()));

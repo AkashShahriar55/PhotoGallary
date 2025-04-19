@@ -7,22 +7,22 @@ import 'package:photo_gallary/app/domain/result.dart';
 import 'package:photo_gallary/app/domain/usecase/base/use_case.dart';
 
 class FetchGalleryPhotos extends BaseUserCase<List<Photo>, void> {
-  final GalleryRepository galleryRepository;
-  final PermissionManager permissionManager;
+  final GalleryRepository _galleryRepository;
+  final PermissionManager _permissionManager;
 
-  FetchGalleryPhotos({
-    required this.permissionManager,
-    required this.galleryRepository,
-  });
+  FetchGalleryPhotos(
+     this._galleryRepository,
+     this._permissionManager,
+  );
 
   @override
   Future<Result<List<Photo>>> call([void _]) async{
     try{
-      final permission = await permissionManager.checkAndRequestPhotoPermission(false);
+      final permission = await _permissionManager.checkAndRequestPhotoPermission(false);
       if(permission == false){
         return Result.error(Exception("Permission denied"));
       }
-      final photos = await galleryRepository.fetchPhotos();
+      final photos = await _galleryRepository.fetchPhotos();
       return Result.ok(photos);
     }catch(e){
       return Result.error(Exception(e.toString()));

@@ -6,6 +6,7 @@ import 'package:gal/gal.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
+import 'package:photo_gallary/app/domain/usecase/save_gallery_photos.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/download_cubit/download_state.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/selection_cubit/selection_cubit.dart';
 
@@ -13,12 +14,14 @@ import '../../../../../core/utils/logger.dart';
 
 class DownloadCubit extends Cubit<DownloadState>{
 
-  final SelectionCubit selectionCubit;
+  final SelectionCubit _selectionCubit;
   late final StreamSubscription<List<Photo>> _sub;
 
+  final SaveGalleryPhotos _saveGalleryPhotos;
 
-  DownloadCubit(this.selectionCubit) : super(DownloadState()){
-    _sub = selectionCubit.stream.listen((event) {
+
+  DownloadCubit(this._selectionCubit, this._saveGalleryPhotos) : super(DownloadState()){
+    _sub = _selectionCubit.stream.listen((event) {
       if(event.isNotEmpty){
         emit(state.copyWith(isPhotoSelected: true));
       }else{
@@ -35,48 +38,28 @@ class DownloadCubit extends Cubit<DownloadState>{
   }
 
   Future<void> downloadPhotos() async {
-    final photos = selectionCubit.state;
+    final photos = _selectionCubit.state;
     if (photos.isEmpty) return;
 
     //emit loading
-    emit(state.copyWith(
-      status: DownloadStatus.downloading,
-    ));
 
-    try {
-      //get external storage directory
-      final baseDir = await getExternalStorageDirectory();
-      final downloadDir = Directory(path.join(baseDir!.path, 'Download'));
-      if (!await downloadDir.exists()) {
-        await downloadDir.create(recursive: true);
-      }
 
-      // Check for access premission
-      final hasAccess = await Gal.hasAccess();
-      Log.d("hasAccess: $hasAccess");
-      // Request access premission
-      await Gal.requestAccess();
-
-      //copy each file
-      int index = 0;
-      for (final photo in photos) {
-        final src = File(photo.path);
-        await Gal.putImage(src.path,album: "cheq");
+    for (final photo in photos) {
+      emit(state.copyWith(
+        status: DownloadStatus.downloading,
+      ));
+      final result = await _saveGalleryPhotos(photo);
+      result.when(onSuccess: (value){
+        //emit success
         emit(state.copyWith(
-          progress: index++
+          status: DownloadStatus.success,
         ));
-      }
-      //emit success
-      emit(state.copyWith(
-        status: DownloadStatus.success,
-      ));
-
-    } catch (e) {
-      Log.e('downloadPhotos error ${e.toString()}');
-      emit(state.copyWith(
-        status: DownloadStatus.error,
-        errorMessage: e.toString(),
-      ));
+      }, onError: (e,st){
+        emit(state.copyWith(
+          status: DownloadStatus.error,
+          errorMessage: e.toString(),
+        ));
+      });
     }
 
     emit(state.copyWith(
