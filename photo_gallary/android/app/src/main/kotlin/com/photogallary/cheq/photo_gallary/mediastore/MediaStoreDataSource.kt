@@ -7,11 +7,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class MediaStoreDataSource(private val context:Context) {
-    suspend fun getPaginatedPhotos(): Result<List<Photo>> = withContext(Dispatchers.IO) {
+    suspend fun getPhotos(): Result<List<Photo>> = withContext(Dispatchers.IO) {
         return@withContext runCatching {
             val photos = mutableListOf<Photo>()
-            photos.addAll(fetchAllPhotosPaginated(context,MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
+            photos.addAll(fetchAllPhotos(context,MediaStore.Images.Media.EXTERNAL_CONTENT_URI))
             photos
+        }
+    }
+
+    suspend fun saveAndFetchPhoto(context: Context, sourcePath: String): Result<Photo?> = withContext(Dispatchers.IO) {
+        return@withContext runCatching {
+            saveImageAndFetchPhoto(context,sourcePath)
         }
     }
 }

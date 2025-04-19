@@ -51,6 +51,8 @@ dependencies:
   gal: ^2.3.1
   image: ^4.5.4
   bloc: any
+  image_gallery_saver_plus: ^4.0.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

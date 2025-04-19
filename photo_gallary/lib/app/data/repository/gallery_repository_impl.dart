@@ -15,7 +15,7 @@ class GalleryRepositoryImpl extends GalleryRepository{
   }
 
   @override
-  Future<String> savePhotos(Photo photo) async{
+  Future<Photo?> savePhotos(Photo photo) async{
     return await _photoDatasource.savePhoto(photo);
   }
 }

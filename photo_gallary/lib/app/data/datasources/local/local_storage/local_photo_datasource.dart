@@ -27,11 +27,12 @@ class LocalPhotoDatasource extends PhotoDataSource {
   }
 
   @override
-  Future<String> savePhoto(Photo photo, {int blurRadius = 10}) async{
+  Future<Photo?> savePhoto(Photo photo) async{
     //get external storage directory
     final src = File(photo.path);
-    await Gal.putImage(src.path);
-    return "";
+    // await Gal.putImage(src.path);
+    final result = await _channel.invokeMethod('saveAndFetchPhoto', {"path": src.path});
+    return result != null ? Photo.fromJson(result) : null;
   }
 
 }

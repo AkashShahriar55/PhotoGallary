@@ -2,5 +2,5 @@ import 'package:photo_gallary/app/data/datasources/local/local_storage/model/pho
 
 abstract class GalleryRepository{
   Future<List<Photo>> fetchPhotos();
-  Future<String> savePhotos(Photo photo);
+  Future<Photo?> savePhotos(Photo photo);
 }

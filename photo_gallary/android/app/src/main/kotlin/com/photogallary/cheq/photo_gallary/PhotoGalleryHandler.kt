@@ -25,7 +25,16 @@ class PhotoGalleryHandler(private val context: Context) : MethodChannel.MethodCa
         when (call.method) {
             "getImages" -> {
                 // Fetch images with pagination using coroutines
-                fetchImagesWithPagination(result)
+                fetchImages(result)
+            }
+            "saveAndFetchPhoto" -> {
+                // Fetch the last image
+                val path = call.argument<String>("path")
+                if(path == null){
+                    result.error("INVALID_ARGUMENT", "Path is required", null)
+                    return
+                }
+                saveAndFetchPhoto(path,result)
             }
             else -> result.notImplemented()
         }
@@ -33,7 +42,7 @@ class PhotoGalleryHandler(private val context: Context) : MethodChannel.MethodCa
 
 
 
-    private fun fetchImagesWithPagination(result: MethodChannel.Result) {
+    private fun fetchImages(result: MethodChannel.Result) {
         CoroutineScope(Dispatchers.Main).launch {
             try {
                 // Check permissions before accessing gallery
@@ -41,7 +50,7 @@ class PhotoGalleryHandler(private val context: Context) : MethodChannel.MethodCa
                     throw SecurityException("Storage permission not granted")
                 }
                 // Fetch images asynchronously
-                val images = mediaStoreDataSource.getPaginatedPhotos()
+                val images = mediaStoreDataSource.getPhotos()
 
                 if(images.isSuccess){
                     result.success(images.getOrNull()?.map { it.toJson() })  // Return the photos to Flutter
@@ -51,6 +60,28 @@ class PhotoGalleryHandler(private val context: Context) : MethodChannel.MethodCa
 
             } catch (e: Exception) {
                 result.error("QUERY_FAILED", "Failed to fetch images: ${e.message}", null)
+            }
+        }
+    }
+
+    private fun saveAndFetchPhoto(path:String,result: MethodChannel.Result) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                // Check permissions before accessing gallery
+                if (!hasStoragePermission()) {
+                    throw SecurityException("Storage permission not granted")
+                }
+                // Fetch the last image asynchronously
+                val lastImage = mediaStoreDataSource.saveAndFetchPhoto(context,path)
+
+                if(lastImage.isSuccess){
+                    result.success(lastImage.getOrNull()?.toJson())  // Return the last image to Flutter
+                }else{
+                    result.error("QUERY_FAILED", "Failed to fetch last image: ${lastImage.exceptionOrNull()?.message}", null)
+                }
+
+            } catch (e: Exception) {
+                result.error("QUERY_FAILED", "Failed to fetch last image: ${e.message}", null)
             }
         }
     }

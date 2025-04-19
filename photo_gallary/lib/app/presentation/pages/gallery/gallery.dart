@@ -47,6 +47,7 @@ class _GalleryView extends StatelessWidget {
         },
         builder: (ctx, state) {
           if (state.isPhotoLoading) return const Center(child: CircularProgressIndicator());
+          Log.d("${state.photos.length}");
           return _buildGrid(ctx, state.photos);
         },
       ),
@@ -58,6 +59,7 @@ class _GalleryView extends StatelessWidget {
 
   Widget _buildGrid(BuildContext ctx, List<Photo> photos) {
     return GridView.builder(
+      key: ValueKey(photos.length),
       padding: const EdgeInsets.all(Dimens.dimen_4),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 4, crossAxisSpacing: Dimens.dimen_4, mainAxisSpacing: Dimens.dimen_4,

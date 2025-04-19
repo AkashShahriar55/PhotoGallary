@@ -23,7 +23,7 @@ class Photo {
       // From JSON factory for converting JSON to Photo object
       factory Photo.fromJson(dynamic json) {
         return Photo(
-          id: json['id'],
+          id: json['id'].toString(),
           uri: json['uri'],
           name: json['name'],
           path: json['path'],
@@ -33,4 +33,28 @@ class Photo {
           orientation: json['orientation'],
         );
       }
+
+      Photo copyWith({
+        String? id,
+        String? uri,
+        String? name,
+        String? path,
+        int? size,
+        int? width,
+        int? height,
+        int? orientation,
+      }) {
+        return Photo(
+          id: id ?? this.id,
+          uri: uri ?? this.uri,
+          name: name ?? this.name,
+          path: path ?? this.path,
+          size: size ?? this.size,
+          width: width ?? this.width,
+          height: height ?? this.height,
+          orientation: orientation ?? this.orientation,
+        );
+      }
+
+
 }
