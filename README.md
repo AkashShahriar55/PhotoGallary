@@ -39,6 +39,21 @@ flutter pub get
 flutter run
 ```
 
+### iOS Setup
+
+Since this project uses native iOS code, ensure CocoaPods is installed and set up correctly:
+
+```bash
+cd ios
+pod install
+```
+
+Then, run the app using Flutter:
+
+```bash
+flutter run
+```
+
 ## Project Structure
 
 - **Native Android (Kotlin)**: Handles fetching and saving images through platform channels.
