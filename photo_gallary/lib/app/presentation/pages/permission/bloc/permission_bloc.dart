@@ -13,7 +13,7 @@ class PermissionBloc extends Bloc<PermissionEvent,PermissionState>{
       emit(PermissionRequestInProgress());
 
       // Request permission
-      final bool isGranted = await permissionManager.checkAndRequestPhotoPermission(event.shouldOpenSettings);
+      final bool isGranted = await permissionManager.checkAndRequestPhotoPermission(event.shouldOpenSettings,shouldAddImage: true);
 
       Log.d('Permission granted: $isGranted');
       // Emit the success state with the permission status

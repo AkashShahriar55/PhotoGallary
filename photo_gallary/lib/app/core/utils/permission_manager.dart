@@ -52,8 +52,14 @@ abstract class PermissionManager{
   Future<PermissionStatusEnum> requestPermission(PermissionEnum permissionEnum);
   // Check if a permission is granted
   Future<bool> isPermissionGranted(PermissionEnum permissionEnum);
+
+  // Check if a permission is granted
+  Future<PermissionStatusEnum> permissionStatus(PermissionEnum permissionEnum);
+
   // Request multiple permissions at once
   Future<Map<PermissionEnum, PermissionStatusEnum>> requestPermissions(List<PermissionEnum> permissionEnums);
+
+  openAppSettings();
 }
 
 
@@ -85,6 +91,7 @@ class PermissionHandlerManager extends PermissionManager {
     });
   }
 
+  @override
   void openAppSettings() {
     openAppSettings(); // Calls platform-specific method to open settings
   }
@@ -125,6 +132,14 @@ class PermissionHandlerManager extends PermissionManager {
       case PermissionStatus.provisional:
         return PermissionStatusEnum.provisional;
     }
+  }
+
+  @override
+  Future<PermissionStatusEnum> permissionStatus(PermissionEnum permissionEnum) {
+    final permission = _mapPermissionEnumToPermission(permissionEnum);
+    return permission.status.then((status) {
+      return _mapPermissionStatusToPermissionStatusEnum(status);
+    });
   }
 
 }

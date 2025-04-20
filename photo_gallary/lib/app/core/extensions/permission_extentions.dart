@@ -8,17 +8,25 @@ extension PermissionExtentions on PermissionManager {
 
   /// Requests (and/or opens Settings) for the proper photo/storage permissions
   /// on both Android and iOS.
-  Future<bool> checkAndRequestPhotoPermission(bool shouldOpenSettings) async {
+  Future<bool> checkAndRequestPhotoPermission(bool shouldOpenSettings,
+      {bool shouldAddImage = false}) async {
     if (Platform.isAndroid) {
       final androidInfo = await DeviceInfoPlugin().androidInfo;
       final sdk = androidInfo.version.sdkInt;
 
       // On Android 13+ you split by media type; below you still use storage
-      final permission = (sdk >= 33) ? Permission.photos : Permission.storage;
-      final status = await permission.request();
+      final permission = (sdk >= 33) ? PermissionEnum.photos : PermissionEnum.storage;
+      PermissionStatusEnum status = await permissionStatus(permission);
 
-      if (status.isGranted) return true;
-      if (status.isPermanentlyDenied && shouldOpenSettings) {
+      if(status == PermissionStatusEnum.limited && shouldAddImage) {
+        status = await requestPermission(permission);
+      }else if(status != PermissionStatusEnum.limited) {
+        status = await requestPermission(permission);
+      }
+
+      if (status == PermissionStatusEnum.granted || status == PermissionStatusEnum.limited) return true;
+
+      if (status == PermissionStatusEnum.permanentlyDenied && shouldOpenSettings) {
         await openAppSettings();
       }
       return false;
@@ -26,23 +34,34 @@ extension PermissionExtentions on PermissionManager {
 
     if (Platform.isIOS) {
       // iOS 14+ has a new permission for adding photos
-      final statusRead = await Permission.photos.request();
-      final readOk = statusRead.isGranted || statusRead.isLimited; // limited on iOS14+
+
+      PermissionStatusEnum statusRead = await permissionStatus(PermissionEnum.photos);
+
+      if(statusRead == PermissionStatusEnum.limited && shouldAddImage) {
+        statusRead = await requestPermission(PermissionEnum.photos);
+      }else if(statusRead != PermissionStatusEnum.limited) {
+        statusRead = await requestPermission(PermissionEnum.photos);
+      }
+
+      final readOk = statusRead == PermissionStatusEnum.granted || statusRead == PermissionStatusEnum.limited; // limited on iOS14+
+
+
+
       if (!readOk) {
-        if (statusRead.isPermanentlyDenied && shouldOpenSettings) {
+        if (statusRead == PermissionStatusEnum.permanentlyDenied && shouldOpenSettings) {
           await openAppSettings();
         }
         return false;
       }
 
-      // // iOS 14+ has a new permission for adding photos
-      // final statusAdd = await Permission.photosAddOnly.request();
-      // if (!statusAdd.isGranted) {
-      //   if (statusAdd.isPermanentlyDenied && shouldOpenSettings) {
-      //     await openAppSettings();
-      //   }
-      //   return false;
-      // }
+      // iOS 14+ has a new permission for adding photos
+      final statusAdd = await Permission.photosAddOnly.request();
+      if (!statusAdd.isGranted) {
+        if (statusAdd.isPermanentlyDenied && shouldOpenSettings) {
+          await openAppSettings();
+        }
+        return false;
+      }
 
       return true;
     }

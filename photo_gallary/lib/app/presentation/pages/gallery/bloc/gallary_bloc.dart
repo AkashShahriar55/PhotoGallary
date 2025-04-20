@@ -72,7 +72,7 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
         emit(state.copyWith(
           status: DownloadStatus.success,
           progress: ((++index) / photos.length * 100).toInt(),
-          photos: [newPhoto as Photo,...state.photos],
+          photos: [newPhoto,...state.photos],
         ));
 
       }, onError: (e,st){

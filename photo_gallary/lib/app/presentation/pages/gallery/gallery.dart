@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:photo_gallary/app/core/theme/sizes.dart';
 import 'package:photo_gallary/app/core/utils/logger.dart';
@@ -32,27 +33,63 @@ class _GalleryView extends StatelessWidget {
 
   const _GalleryView();
 
+  Future<bool?> _showExitDialog(BuildContext context) {
+    return showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Exit App?'),
+        content: const Text('Do you really want to quit?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: galleryAppBar(context: context, title: 'Photos'),
-      body: BlocConsumer<GalleryBloc, GalleryState>(
-        listener: (context, state) {
-          if (state.errorMessage != null) {
-            Log.e(state.errorMessage.toString());
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.errorMessage ?? "")),
-            );
-          }
-        },
-        builder: (ctx, state) {
-          if (state.isPhotoLoading) return const Center(child: CircularProgressIndicator());
-          Log.d("${state.photos.length}");
-          return _buildGrid(ctx, state.photos);
-        },
+    return PopScope<Object?>(
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, Object? result) async {
+        // If the route already popped, do nothing
+        if (didPop) return;
+
+        // Otherwise, show confirmation dialog
+        final shouldExit = await _showExitDialog(context);
+        if (shouldExit == true) {
+          // Exit the app
+          SystemNavigator.pop();
+        }
+      },
+      child: Scaffold(
+        appBar: galleryAppBar(context: context, title: 'Photos',onPressed: () async {
+          await _showExitDialog(context);
+        }),
+        body: BlocConsumer<GalleryBloc, GalleryState>(
+          listener: (context, state) {
+            if (state.errorMessage != null) {
+              Log.e(state.errorMessage.toString());
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.errorMessage ?? "")),
+              );
+            }
+          },
+          builder: (ctx, state) {
+            if (state.isPhotoLoading) return const Center(child: CircularProgressIndicator());
+            Log.d("${state.photos.length}");
+            return _buildGrid(ctx, state.photos);
+          },
+        ),
+        floatingActionButton: _buildDownloadFab(context),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
-      floatingActionButton: _buildDownloadFab(context),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
