@@ -1,16 +1,55 @@
-# photo_gallary
+# Photo Gallery
 
-A simple photo gallary using Flutter
+A simple Flutter-based photo gallery application that integrates native platform channels to fetch and display local gallery images without using third-party packages.
+
+## Requirements
+
+- **No Third-Party Packages:** Fetch images from the device gallery using native Android and iOS code through platform channels.
+- **Native Implementation:** Native platform-specific code (Kotlin/Swift) is used to retrieve images.
+- **Image Grid:** Display images in a 4x4 grid layout.
+- **Selection Feature:** Allow users to select images. Selected images display a tick icon.
+- **Blur Effect:** Selected images appear blurred.
+- **Download Functionality:** Include a download button that saves selected images individually back to the device gallery/photos.
+- **Loading Indicators:** Display loading indicators appropriately during image retrieval and saving.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Flutter Setup
 
-A few resources to get you started if this is your first Flutter project:
+Make sure Flutter is installed and properly configured:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Flutter Installation Guide](https://docs.flutter.dev/get-started/install)
+
+### Generate App Icons
+
+This project uses `flutter_launcher_icons`. To generate launcher icons, run:
+
+```bash
+flutter pub get
+flutter pub run flutter_launcher_icons:main
+```
+
+### Running the App
+
+Run the following commands to start the app:
+
+```bash
+flutter clean
+flutter pub get
+flutter run
+```
+
+## Project Structure
+
+- **Native Android (Kotlin)**: Handles fetching and saving images through platform channels.
+- **Native iOS (Swift)**: Handles fetching and saving images through platform channels.
+- **Flutter UI**: Displays images in a grid, allows selection with blur and tick effects, and manages image downloads.
+
+## Resources
+
+- [Flutter Documentation](https://docs.flutter.dev/)
+- [Platform Channels](https://docs.flutter.dev/platform-integration/platform-channels)
 - [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+---
+
