@@ -24,6 +24,18 @@ public class PhotoGalleryPlugin: NSObject, FlutterPlugin {
     case "getImages":
       // Directly fetch assets without permission checks here
       retrieveAssets(result: result)
+    case "saveAndFetchPhoto":
+          // Expecting arguments as a dictionary with key "path"
+          guard let args = call.arguments as? [String: Any],
+                let sourcePath = args["path"] as? String else {
+            result(FlutterError(
+              code: "INVALID_ARGUMENT",
+              message: "Expected map with key 'path' pointing to String",
+              details: nil
+            ))
+            return
+          }
+          saveAndFetchPhoto(sourcePath: sourcePath, result: result)
     default:
       result(FlutterMethodNotImplemented)
     }
@@ -77,4 +89,71 @@ public class PhotoGalleryPlugin: NSObject, FlutterPlugin {
     // Return results
     result(photosArray)
   }
+    
+   private func saveAndFetchPhoto(sourcePath: String, result: @escaping FlutterResult) {
+       let fileURL = URL(fileURLWithPath: sourcePath)
+       var placeholderId: String?
+
+       PHPhotoLibrary.shared().performChanges({
+         if let req = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: fileURL) {
+           placeholderId = req.placeholderForCreatedAsset?.localIdentifier
+         }
+       }, completionHandler: { success, error in
+         DispatchQueue.main.async {
+           if let error = error {
+             result(FlutterError(code: "SAVE_FAILED", message: error.localizedDescription, details: nil))
+             return
+           }
+           guard success, let id = placeholderId else {
+             result(FlutterError(code: "SAVE_FAILED", message: "Unknown save error", details: nil))
+             return
+           }
+
+           let assets = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil)
+           guard let asset = assets.firstObject else {
+             result(FlutterError(code: "FETCH_FAILED", message: "Saved image not found", details: nil))
+             return
+           }
+
+           let imgOptions = PHImageRequestOptions()
+           imgOptions.isSynchronous = false
+           imgOptions.isNetworkAccessAllowed = true
+           imgOptions.version = .current
+           imgOptions.deliveryMode = .highQualityFormat
+
+           let fetchHandler: (Data?, String?, Any, [AnyHashable: Any]?) -> Void = { data, _, orientationRaw, _ in
+             guard let data = data else {
+               result(FlutterError(code: "FETCH_FAILED", message: "Failed to get image data", details: nil))
+               return
+             }
+             let filename = asset.value(forKey: "filename") as? String ?? "image.jpg"
+             let tempURL = URL(fileURLWithPath: NSTemporaryDirectory())
+               .appendingPathComponent(filename)
+             do { try data.write(to: tempURL) } catch {
+               result(FlutterError(code: "FETCH_FAILED", message: "Write error: \(error.localizedDescription)", details: nil))
+               return
+             }
+             let fileSize = (try? FileManager.default.attributesOfItem(atPath: tempURL.path)[.size] as? NSNumber)?.intValue ?? 0
+             let meta: [String: Any] = [
+               "id": asset.localIdentifier,
+               "uri": asset.localIdentifier,
+               "name": filename,
+               "size": fileSize,
+               "timestamp": asset.creationDate?.timeIntervalSince1970 ?? 0,
+               "path": tempURL.path,
+               "width": asset.pixelWidth,
+               "height": asset.pixelHeight,
+               "orientation": (orientationRaw as? UInt32).flatMap({ Int32(bitPattern: $0) }) ?? Int32(orientationRaw as? Int ?? 0)
+             ]
+             result(meta)
+           }
+
+           if #available(iOS 13, *) {
+             PHImageManager.default().requestImageDataAndOrientation(for: asset, options: imgOptions, resultHandler: fetchHandler)
+           } else {
+             PHImageManager.default().requestImageData(for: asset, options: imgOptions, resultHandler: fetchHandler)
+           }
+         }
+       })
+     }
 }
