@@ -5,7 +5,6 @@ import 'package:photo_gallary/app/domain/usecase/fetch_gallery_photos.dart';
 import 'package:photo_gallary/app/domain/repository/gallery_repository.dart';
 import 'package:photo_gallary/app/core/utils/permission_manager.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
-import 'package:photo_gallary/app/domain/result.dart';
 
 class MockGalleryRepository extends Mock implements GalleryRepository {}
 class MockPermissionManager extends Mock implements PermissionManager {}
@@ -73,7 +72,7 @@ void main() {
     });
 
     test('returns error when repository throws an exception', () async {
-      // Arrange: permission granted but repository throws
+
       when(() => mockPermissionManager.checkAndRequestPhotoPermission(false))
           .thenAnswer((_) async => true);
       when(() => mockGalleryRepository.fetchPhotos())

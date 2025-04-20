@@ -12,16 +12,16 @@ import 'package:photo_gallary/app/domain/result.dart';
 
 
 
-// 1. Mock classes
+
 class MockFetchGalleryPhotos extends Mock implements FetchGalleryPhotos {}
 class MockSaveGalleryPhotos  extends Mock implements SaveGalleryPhotos {}
 
-// 2. Fake photo for mocktail argument matching
+
 class FakePhoto extends Fake implements Photo {}
 
 
 void main() {
-  // Register the fake so mocktail knows how to handle Photo args
+
   setUpAll(() {
     registerFallbackValue(FakePhoto());
   });
@@ -63,10 +63,10 @@ void main() {
           mockSaveGalleryPhotos,
         );
       },
-      // No extra event needed; the constructor already fires FetchPhotos()
+
       act: (bloc) => bloc.add(const FetchPhotos()),
       expect: () => [
-        // 1) loading: errorMessage cleared
+
         predicate<GalleryState>(
               (state) =>
           state.isPhotoLoading == true &&
@@ -74,7 +74,7 @@ void main() {
               state.photos.isEmpty,
           'loading state',
         ),
-        // 2) success: loading false and photos populated
+
         predicate<GalleryState>(
               (state) =>
           state.isPhotoLoading == false &&

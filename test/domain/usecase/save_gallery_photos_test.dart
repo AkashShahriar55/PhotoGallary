@@ -36,7 +36,7 @@ void main() {
 
   group('SaveGalleryPhotos UseCase', () {
     test('returns error when permission denied', () async {
-      // Arrange: permission denied
+
       when(() => mockPermissionManager.checkAndRequestPhotoPermission(false))
           .thenAnswer((_) async => false);
 
@@ -56,7 +56,7 @@ void main() {
     });
 
     test('returns saved photo when permission granted and save succeeds', () async {
-      // Arrange: permission granted
+
       when(() => mockPermissionManager.checkAndRequestPhotoPermission(false))
           .thenAnswer((_) async => true);
       when(() => mockGalleryRepository.savePhotos(tPhoto))
@@ -74,7 +74,7 @@ void main() {
     });
 
     test('returns error when repository throws exception', () async {
-      // Arrange: permission granted but save fails
+
       when(() => mockPermissionManager.checkAndRequestPhotoPermission(false))
           .thenAnswer((_) async => true);
       when(() => mockGalleryRepository.savePhotos(any()))

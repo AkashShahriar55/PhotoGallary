@@ -3,7 +3,6 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_bloc.dart';
-import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_event.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_state.dart';
 import 'package:photo_gallary/app/core/utils/permission_manager.dart';
 
