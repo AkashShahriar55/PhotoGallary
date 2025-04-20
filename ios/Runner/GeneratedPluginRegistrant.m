@@ -12,18 +12,6 @@
 @import device_info_plus;
 #endif
 
-#if __has_include(<gal/GalPlugin.h>)
-#import <gal/GalPlugin.h>
-#else
-@import gal;
-#endif
-
-#if __has_include(<image_gallery_saver_plus/ImageGallerySaverPlusPlugin.h>)
-#import <image_gallery_saver_plus/ImageGallerySaverPlusPlugin.h>
-#else
-@import image_gallery_saver_plus;
-#endif
-
 #if __has_include(<path_provider_foundation/PathProviderPlugin.h>)
 #import <path_provider_foundation/PathProviderPlugin.h>
 #else
@@ -40,8 +28,6 @@
 
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [FPPDeviceInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPDeviceInfoPlusPlugin"]];
-  [GalPlugin registerWithRegistrar:[registry registrarForPlugin:@"GalPlugin"]];
-  [ImageGallerySaverPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ImageGallerySaverPlusPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
   [PermissionHandlerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PermissionHandlerPlugin"]];
 }

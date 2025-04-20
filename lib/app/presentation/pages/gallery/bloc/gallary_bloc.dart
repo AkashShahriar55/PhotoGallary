@@ -1,7 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
 import 'package:photo_gallary/app/presentation/pages/gallery/bloc/gallary_event.dart';
-import '../../../../core/utils/logger.dart';
 import '../../../../domain/usecase/fetch_gallery_photos.dart';
 import '../../../../domain/usecase/save_gallery_photos.dart';
 import 'gallary_state.dart';
