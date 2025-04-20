@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_gallary/app/constants/strings.dart';
 import 'package:photo_gallary/app/routes/router.dart';
 import 'core/theme/theme.dart';
 
@@ -10,7 +11,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     AppTheme theme = AppTheme();
     return MaterialApp.router(
-      title: 'Photo Gallery',
+      title: AppStrings.title,
       routerConfig: router,
       theme: theme.light(),
     );

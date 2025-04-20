@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:photo_gallary/app/constants/strings.dart';
 import 'package:photo_gallary/app/core/theme/sizes.dart';
 import 'package:photo_gallary/app/core/utils/logger.dart';
 import 'package:photo_gallary/app/core/widgets/gallery_app_bar.dart';
@@ -37,16 +38,16 @@ class _GalleryView extends StatelessWidget {
     return showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Exit App?'),
-        content: const Text('Do you really want to quit?'),
+        title: const Text(AppStrings.exitAppTitle),
+        content: const Text(AppStrings.exitAppMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
+            child: const Text(AppStrings.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(true),
-            child: const Text('Yes'),
+            child: const Text(AppStrings.yes),
           ),
         ],
       ),
@@ -69,7 +70,7 @@ class _GalleryView extends StatelessWidget {
         }
       },
       child: Scaffold(
-        appBar: galleryAppBar(context: context, title: 'Photos',onPressed: () async {
+        appBar: galleryAppBar(context: context, title: AppStrings.photos,onPressed: () async {
           await _showExitDialog(context);
         }),
         body: BlocConsumer<GalleryBloc, GalleryState>(
@@ -124,8 +125,8 @@ class _GalleryView extends StatelessWidget {
         if (selectedList.isEmpty) return const SizedBox.shrink();
         return Container(
           margin: const EdgeInsets.only(bottom: Dimens.dimen_33),
-          width: 310,
-          height: 50,
+          width: Dimens.dimen_310,
+          height: Dimens.dimen_50,
           child: _buildDownloadFabContent(context),
         );
       },
@@ -146,7 +147,7 @@ class _GalleryView extends StatelessWidget {
                 ? const SizedBox(
               width: Dimens.dimen_24, height: Dimens.dimen_24, child: CircularProgressIndicator(strokeWidth: Dimens.dimen_2),
             )
-                : const Text('DOWNLOAD'),
+                : const Text(AppStrings.download),
           );
         }
     );

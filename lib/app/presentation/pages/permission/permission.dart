@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:photo_gallary/app/constants/assets.dart';
+import 'package:photo_gallary/app/constants/strings.dart';
 import 'package:photo_gallary/app/core/extensions/extensions.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/permission/bloc/permission_event.dart';
@@ -36,7 +38,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
     return BlocListener<PermissionBloc,PermissionState>(
       bloc: _permissionBloc,
       listener: (context, state) {
-        Log.d('Permission state: $state');
         if(state is PermissionRequestSuccess){
           if(state.isPermissionGranted){
             _goToGallery();
@@ -48,15 +49,15 @@ class _PermissionScreenState extends State<PermissionScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset('assets/svgs/permission_icon.svg',width: 123,height: 149),
+              SvgPicture.asset(AppAssets.permissionIcon,width: Dimens.dimen_123,height: Dimens.dimen_149),
               SizedBox(height: Dimens.dimen_42),
               Text(
-                'Require Permission',
+                AppStrings.requirePermission,
                 style: context.textTheme.bodyMedium,
               ),
               SizedBox(height: Dimens.dimen_8),
               Text(
-                'To show your black and white photos\nwe just need your folder permission.\nWe promise, we don’t take your photos.',
+                AppStrings.requirePermissionDescription,
                 style: context.textTheme.displaySmall,
                 textAlign: TextAlign.center,
               ),
@@ -69,7 +70,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                       _permissionBloc.add(PhotoPermissionRequest(shouldOpenSettings: true));
                     },
                     child:  Text(
-                      'Grant Access',
+                     AppStrings.grantAccess,
                       style: context.textTheme.labelMedium,
                     )
                 ),

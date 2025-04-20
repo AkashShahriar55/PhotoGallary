@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:photo_gallary/app/constants/assets.dart';
+import 'package:photo_gallary/app/core/theme/sizes.dart';
 import 'package:photo_gallary/app/di/injection.dart';
 import 'package:photo_gallary/app/presentation/pages/splash/bloc/splash_bloc.dart';
 import 'package:photo_gallary/app/presentation/pages/splash/bloc/splash_state.dart';
@@ -33,7 +35,7 @@ class _SplashScreenState extends State<SplashScreen> {
       },
       child: Scaffold(
         body: Center(
-          child: Image.asset('assets/icon/icon.png',width: 130,height: 130),
+          child: Image.asset(AppAssets.icon,width: Dimens.dimen_130,height: Dimens.dimen_130),
         ),
       ),
     );

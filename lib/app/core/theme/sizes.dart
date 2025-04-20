@@ -23,5 +23,6 @@ final class Dimens{
   static const double dimen_149 = 149;
   static const double dimen_123 = 123;
   static const double dimen_296 = 296;
+  static const double dimen_310 = 310;
 
 }
