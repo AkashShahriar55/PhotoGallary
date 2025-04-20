@@ -1,6 +1,5 @@
 
 import 'package:bloc/bloc.dart';
-import 'package:photo_gallary/app/core/extensions/permission_extentions.dart';
 import 'package:photo_gallary/app/core/utils/permission_manager.dart';
 import 'package:photo_gallary/app/presentation/pages/splash/bloc/splash_event.dart';
 import 'package:photo_gallary/app/presentation/pages/splash/bloc/splash_state.dart';

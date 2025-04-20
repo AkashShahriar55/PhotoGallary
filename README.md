@@ -68,3 +68,5 @@ flutter run
 
 ---
 
+
+[Coverage Report](https://<your‑username>.github.io/<repo>/index.html)

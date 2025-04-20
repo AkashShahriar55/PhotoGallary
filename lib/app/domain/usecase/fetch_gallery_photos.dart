@@ -1,5 +1,3 @@
-
-import 'package:photo_gallary/app/core/extensions/permission_extentions.dart';
 import 'package:photo_gallary/app/core/utils/permission_manager.dart';
 import 'package:photo_gallary/app/data/datasources/local/local_storage/model/photo.dart';
 import 'package:photo_gallary/app/domain/repository/gallery_repository.dart';

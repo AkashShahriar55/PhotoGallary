@@ -38,8 +38,6 @@ class GalleryBloc extends Bloc<GalleryEvent, GalleryState> {
         await _downloadPhotos(event, emit);
       },
     );
-
-    add(FetchPhotos());
   }
 
 
