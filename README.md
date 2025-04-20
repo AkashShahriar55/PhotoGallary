@@ -68,6 +68,9 @@ flutter run
 
 ---
 
-## Code Coverage
+## Demo
 
-You can view the latest coverage report [here](docs/index.html).
+<video controls width="600" poster="demo/poster.jpeg">
+  <source src="demo/demo.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
