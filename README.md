@@ -70,7 +70,4 @@ flutter run
 
 ## Demo
 
-<video controls width="600" poster="demo/poster.jpeg">
-  <source src="demo/demo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+[Click here to view the demo video](demo/demo.mp4)
