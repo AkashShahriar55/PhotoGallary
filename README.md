@@ -68,5 +68,6 @@ flutter run
 
 ---
 
+## Code Coverage
 
-[Coverage Report](https://<your‑username>.github.io/<repo>/index.html)
+You can view the latest coverage report [here](coverage/html/index.html).
