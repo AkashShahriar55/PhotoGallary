@@ -70,4 +70,4 @@ flutter run
 
 ## Code Coverage
 
-You can view the latest coverage report [here](docs/html/index.html).
+You can view the latest coverage report [here](docs/index.html).
