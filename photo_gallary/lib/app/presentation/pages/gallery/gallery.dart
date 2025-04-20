@@ -21,7 +21,7 @@ class GalleryScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider(create: (_) => SelectionCubit()),
+          BlocProvider(create: (_) => getIt<SelectionCubit>()),
           BlocProvider(create: (_) => getIt<GalleryBloc>()),
         ],
         child: const _GalleryView()

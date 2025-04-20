@@ -46,8 +46,9 @@ public class PhotoGalleryPlugin: NSObject, FlutterPlugin {
 
     // Configure fetch: descending by creation date
     let options = PHFetchOptions()
+
     options.sortDescriptors = [
-      NSSortDescriptor(key: "creationDate", ascending: false)
+      NSSortDescriptor(key: "modificationDate", ascending: false)
     ]
 
     let assets = PHAsset.fetchAssets(with: .image, options: options)
